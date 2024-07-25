@@ -2,6 +2,11 @@
 import { useChangeListener } from "@/hooks.ts";
 import useTasksStore from "@/store/taskStore";
 import { useEffect, useState } from "react";
+export enum TaskStatus {
+  TODO = "todo",
+  IN_PROGRESS = "in_progress",
+  DONE = "done",
+}
 
 const useTasks = () => {
   const taskStore = useTasksStore();

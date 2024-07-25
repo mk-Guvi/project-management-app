@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
-import useTasks from "./useTasks";
+import useTasks, { TaskStatus } from "./useTasks";
 import TaskList from "./components/TaskList";
 import { TaskDocument } from "@/store/taskStore";
 import { Input } from "@/components/ui/input";
@@ -17,13 +17,8 @@ import { useModal } from "@/providers/modalProvider";
 import TaskModalContent from "./components/TaskModalContent";
 import TaskDeleteModalContent from "./components/TaskDeleteModalContent";
 
-export enum TaskStatus {
-  TODO = "todo",
-  IN_PROGRESS = "in_progress",
-  DONE = "done",
-}
 
-const TaskBoard: React.FC = () => {
+const TaskBoardPage: React.FC = () => {
   const { handleState } = useModal();
   const {
     tasks,
@@ -149,4 +144,4 @@ const TaskBoard: React.FC = () => {
   );
 };
 
-export default TaskBoard;
+export default TaskBoardPage;

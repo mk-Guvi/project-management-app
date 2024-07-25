@@ -3,8 +3,9 @@ import React from "react";
 import { TaskDocument } from "@/store/taskStore";
 import TaskContent from "./TaskContent";
 import { Droppable } from "react-beautiful-dnd";
-import { TaskStatus } from "../page";
+
 import { Skeleton } from "@/components/ui/skeleton";
+import { TaskStatus } from "../useTasks";
 
 interface TaskListProps {
   title: string;

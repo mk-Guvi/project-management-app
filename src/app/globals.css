@@ -67,3 +67,26 @@
     @apply bg-background text-foreground m-0 p-0 h-[100dvh] w-[100dvw] overflow-y-auto overflow-x-hidden;
   }
 }
+
+
+*{
+  scrollbar-width: thin;
+}
+
+
+.scrollbar-hide {
+  scrollbar-width: none; /* Hide the scrollbar in Firefox */
+  background-color: transparent;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0; /* Hide the scrollbar */
+  background-color: transparent;
+}
+
+.scrollbar-hide::-webkit-scrollbar-track-piece {
+  width: 0; /* Hide the scrollbar track piece */
+  background-color: transparent;
+}

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Topbar from "@/components/Topbar";
+import ModalProvider from "@/providers/modalProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,8 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning className={inter.className}>
-        {children}
-
+        <ModalProvider>{children}</ModalProvider>
         <Toaster />
       </body>
     </html>

@@ -6,10 +6,12 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className=" pt-[60px] h-full w-full">
-      {children}
-
+    <>
       <Topbar />
-    </main>
+      <main className=" pt-[75px] px-8 overflow-y-auto h-full w-full">
+        {children}
+      </main>
+      
+    </>
   );
 }

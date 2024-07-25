@@ -7,7 +7,7 @@ export function middleware(req: NextRequest) {
   const authRoutes = ['/login', '/signup'];
 
   // Check for the presence of an access token in cookies
-  const hasAccessToken = req.cookies?.has('accessToken');
+  const hasAccessToken = req.cookies?.has('accessToken')||req.cookies?.has('refreshToken');
 
   // If there's no access token and the user is not on an auth route, redirect to login
   if (!hasAccessToken && !authRoutes.includes(path)) {

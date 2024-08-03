@@ -8,7 +8,7 @@ import axios, {
 } from "axios";
 import { redirect } from "next/navigation";
 
-const publicApiNames: string[] = ["login", "signup"];
+
 const baseURL: string = process.env.NEXT_PUBLIC_SERVER_ENDPOINT || "";
 const apiNameKey = "X-API-NAME";
 
@@ -41,8 +41,8 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError): Promise<never> => {
-    const apiName = error.config?.headers?.[apiNameKey] as string;
-    if (error.response?.status === 401 && !publicApiNames.includes(apiName)) {
+    
+    if (error.response?.status === 401 ) {
       clearUser();
     }
     return Promise.reject(error);

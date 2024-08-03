@@ -7,16 +7,23 @@ export function middleware(req: NextRequest) {
   const authRoutes = ['/login', '/signup'];
 
   // Check for the presence of an access token in cookies
-  const hasAccessToken = req.cookies?.has('accessToken')||req.cookies?.has('refreshToken');
+  const hasAccessToken = req.cookies.has('accessToken');
+  const hasRefreshToken = req.cookies.has('refreshToken');
+
+  console.log("Cookies:", req.cookies);
+  console.log("Path:", path);
+  console.log("Has Access Token:", !!hasAccessToken);
+  console.log("Has Refresh Token:", !!hasRefreshToken);
 
   // If there's no access token and the user is not on an auth route, redirect to login
-  if (!hasAccessToken && !authRoutes.includes(path)) {
-    console.log("Im here")
+  if (!hasAccessToken && !hasRefreshToken && !authRoutes.includes(path)) {
+    console.log("Redirecting to /login");
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
   // If there is an access token and the user is on an auth route, redirect to home
-  if (hasAccessToken && authRoutes.includes(path)) {
+  if ((hasAccessToken || hasRefreshToken) && authRoutes.includes(path)) {
+    console.log("Redirecting to /");
     return NextResponse.redirect(new URL('/', req.url));
   }
 

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
-import axiosInstance from "@/utils/backend";
+import  { BackendGet } from "@/utils/backend";
+import { backendRoutes } from "@/constants";
 
 interface UserDetails {
   email: string;
@@ -28,14 +29,16 @@ const useUserDetailsStore = create<UserDetailsStore>((set) => ({
   fetchUserDetails: async () => {
     set({ isLoading: true });
     try {
-      const response = await axiosInstance.get<{
-        type: string;
-        user: UserDetails;
-      }>("/api/me");
+      const response = await BackendGet({
+        path: backendRoutes.userDetails,
+        headers: {
+          "X-API-NAME": "userDetails",
+        },
+      });
 
-      if (response?.data?.type === "success" && response?.data?.user) {
+      if (response?.type === "success" && response?.user) {
         set({
-          userDetails: response?.data?.user,
+          userDetails: response?.user,
           isLoading: false,
         });
       } else {

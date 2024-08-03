@@ -11,6 +11,7 @@ export function middleware(req: NextRequest) {
 
   // If there's no access token and the user is not on an auth route, redirect to login
   if (!hasAccessToken && !authRoutes.includes(path)) {
+    console.log("Im here")
     return NextResponse.redirect(new URL('/login', req.url));
   }
 

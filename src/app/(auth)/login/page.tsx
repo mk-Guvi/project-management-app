@@ -30,6 +30,8 @@ import Link from "next/link";
 import getGoogleOAuthURL from "@/utils/getGoogleUrl";
 import { useRouter } from "next/navigation";
 import useUserDetails from "@/hooks.ts/useUserDetails";
+import { BackendPost } from "@/utils/backend";
+import { backendRoutes } from "@/constants";
 
 const loginSchema = z.object({
   email: z
@@ -60,26 +62,20 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/sessions`,
-        values,
-        { withCredentials: true, validateStatus: (status) => status < 500 } // Only reject if status is 500 or higher
-      );
-      
-
-      if (response.status === 401) {
-        toast({
-          variant: "error",
-          description:
-            response.data?.message ||
-            "Unauthorized access. Please check your credentials.",
-        });
-      } else if (response?.data?.type == "success") {
+      const response = await BackendPost({
+        path: backendRoutes.login,
+        data: values,
+        headers: {
+          "X-API-NAME": "login",
+        },
+      });
+console.log("response",response)
+      if (response?.type == "success") {
         // Handle successful login
         await fetchUserDetails();
 
         router.push("/");
-      } else if (response?.data?.message) {
+      } else if (response?.message) {
         toast({
           variant: "error",
           description: response?.data?.message,

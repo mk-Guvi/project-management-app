@@ -1,31 +1,34 @@
+"use server"
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const cookieStore = cookies();
+  
   // Define auth routes (routes that don't require authentication)
   const authRoutes = ["/login", "/signup"];
+  
+  // Check for the presence of an access token and refresh token in cookies
+  const accessToken = cookieStore.get("accessToken");
+  const refreshToken = cookieStore.get("refreshToken");
 
-  // Check for the presence of an access token in cookies
-  const hasAccessToken = cookieStore.has("accessToken");
-  const hasRefreshToken = cookieStore.has("refreshToken");
+  console.log("Access Token:", accessToken);
+  console.log("Refresh Token:", refreshToken);
 
-  console.log(
-    cookieStore.get("refreshToken"),
-    "Cookies:",
-    cookieStore.get("accessToken")
-  );
+  // Determine if tokens exist
+  const hasAccessToken = !!accessToken;
+  const hasRefreshToken = !!refreshToken;
 
-  // // If there's no access token and the user is not on an auth route, redirect to login
-  // if (!hasAccessToken && !hasRefreshToken && !authRoutes.includes(path)) {
-  //   console.log("Redirecting to /login");
-  //   return NextResponse.redirect(new URL("/login", req.url));
-  // }
+  // If there's no access token and the user is not on an auth route, redirect to login
+  if (!hasAccessToken && !hasRefreshToken && !authRoutes.includes(path)) {
+    console.log("No tokens found, redirecting to /login");
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 
-  // If there is an access token and the user is on an auth route, redirect to home
+  // If there is an access token or refresh token and the user is on an auth route, redirect to home
   if ((hasAccessToken || hasRefreshToken) && authRoutes.includes(path)) {
-    console.log("Redirecting to /");
+    console.log("Tokens found and user on auth route, redirecting to /");
     return NextResponse.redirect(new URL("/", req.url));
   }
 

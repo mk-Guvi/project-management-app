@@ -12,7 +12,7 @@ const nextConfig = {
             },
             {
               key: 'Access-Control-Allow-Origin',
-              value: process.env.BACKEND_URL || 'localhost:1337', // Replace with your Render backend URL
+              value: process.env.NEXT_PUBLIC_SERVER_ENDPOINT || 'localhost:1337', // Replace with your Render backend URL
             },
             {
               key: 'Access-Control-Allow-Methods',

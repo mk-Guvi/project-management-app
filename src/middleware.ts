@@ -1,21 +1,19 @@
-"use server"
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 
 export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  const cookieStore = cookies();
   
   // Define auth routes (routes that don't require authentication)
   const authRoutes = ["/login", "/signup"];
   
   // Check for the presence of an access token and refresh token in cookies
-  const accessToken = cookieStore.get("accessToken");
-  const refreshToken = cookieStore.get("refreshToken");
+  const accessToken = req.cookies.get("accessToken");
+  const refreshToken = req.cookies.get("refreshToken");
 
   console.log("Access Token:", accessToken);
   console.log("Refresh Token:", refreshToken);
-console.log("ALl",cookieStore.getAll())
+  console.log("All Cookies:", req.cookies.getAll());
+
   // Determine if tokens exist
   const hasAccessToken = !!accessToken;
   const hasRefreshToken = !!refreshToken;

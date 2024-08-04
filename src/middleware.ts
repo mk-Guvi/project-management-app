@@ -12,20 +12,20 @@ export function middleware(req: NextRequest) {
 
   console.log("Cookies:", req.cookies);
   console.log("Path:", path);
-  console.log("Has Access Token:", !!hasAccessToken);
-  console.log("Has Refresh Token:", !!hasRefreshToken);
+  console.log("Has Access Token:", hasAccessToken);
+  console.log("Has Refresh Token:", hasRefreshToken);
 
-  // If there's no access token and the user is not on an auth route, redirect to login
-  if (!hasAccessToken && !hasRefreshToken && !authRoutes.includes(path)) {
-    console.log("Redirecting to /login");
-    return NextResponse.redirect(new URL('/login', req.url));
-  }
+  // // If there's no access token and the user is not on an auth route, redirect to login
+  // if (!hasAccessToken && !hasRefreshToken && !authRoutes.includes(path)) {
+  //   console.log("Redirecting to /login");
+  //   return NextResponse.redirect(new URL('/login', req.url));
+  // }
 
-  // If there is an access token and the user is on an auth route, redirect to home
-  if ((hasAccessToken || hasRefreshToken) && authRoutes.includes(path)) {
-    console.log("Redirecting to /");
-    return NextResponse.redirect(new URL('/', req.url));
-  }
+  // // If there is an access token and the user is on an auth route, redirect to home
+  // if ((hasAccessToken || hasRefreshToken) && authRoutes.includes(path)) {
+  //   console.log("Redirecting to /");
+  //   return NextResponse.redirect(new URL('/', req.url));
+  // }
 
   // For all other cases, allow access
   return NextResponse.next();

@@ -15,7 +15,7 @@ interface CookieOptions {
 
 const domain = process.env.COOKIE_DOMAIN || "localhost";
 
-const accessTokenCookieOptions: CookieOptions = {
+export const accessTokenCookieOptions: CookieOptions = {
   maxAge: 900000, // 15 mins
   httpOnly: true,
   domain,
@@ -24,7 +24,7 @@ const accessTokenCookieOptions: CookieOptions = {
   secure: true, // true in production, false in development
 };
 
-const refreshTokenCookieOptions: CookieOptions = {
+export const refreshTokenCookieOptions: CookieOptions = {
   ...accessTokenCookieOptions,
   maxAge: 3.154e10, // 1 year
 };

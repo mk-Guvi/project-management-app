@@ -15,7 +15,7 @@ export function middleware(req: NextRequest) {
 
   console.log("Access Token:", accessToken);
   console.log("Refresh Token:", refreshToken);
-
+console.log("ALl",cookieStore.getAll())
   // Determine if tokens exist
   const hasAccessToken = !!accessToken;
   const hasRefreshToken = !!refreshToken;

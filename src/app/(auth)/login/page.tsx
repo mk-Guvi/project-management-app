@@ -32,6 +32,11 @@ import { useRouter } from "next/navigation";
 import useUserDetails from "@/hooks.ts/useUserDetails";
 import { BackendPost } from "@/utils/backend";
 import { backendRoutes } from "@/constants";
+import {
+  accessTokenCookieOptions,
+  refreshTokenCookieOptions,
+  setCookie,
+} from "@/utils/cookies";
 
 const loginSchema = z.object({
   email: z
@@ -69,8 +74,18 @@ export default function LoginPage() {
           "X-API-NAME": "login",
         },
       });
-console.log("response",response)
+      console.log("response", response);
       if (response?.type == "success") {
+        setCookie(
+          "accessToken",
+          response?.accessToken,
+          accessTokenCookieOptions
+        );
+        setCookie(
+          "refreshToken",
+          response?.refreshToken,
+          refreshTokenCookieOptions
+        );
         // Handle successful login
         await fetchUserDetails();
 

@@ -53,13 +53,10 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   async (response: AxiosResponse): Promise<AxiosResponse> => {
-    return response;
-  },
-  async (error: AxiosError): Promise<never> => {
-    if (error.response?.status === 401) {
-     clearUser();
+    if (response?.status === 401) {
+      clearUser();
     }
-    return Promise.reject(error);
+    return response;
   }
 );
 

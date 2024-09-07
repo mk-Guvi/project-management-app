@@ -10,10 +10,18 @@ export function middleware(req: NextRequest) {
   const accessToken = req.cookies.get("accessToken");
   const refreshToken = req.cookies.get("refreshToken");
 
+  // Log cookie information for debugging
+  console.log("Access Token:", accessToken);
+  console.log("Refresh Token:", refreshToken);
+
   // Determine if tokens exist
   const hasAccessToken = !!accessToken;
   const hasRefreshToken = !!refreshToken;
 
+  // Log token presence for debugging
+  console.log("Has Access Token:", hasAccessToken);
+  console.log("Has Refresh Token:", hasRefreshToken);
+  console.log(req.cookies.getAll(),"------ALL-----COOKIES-----")
   // If there's no access token and the user is not on an auth route, redirect to login
   if (!hasAccessToken && !hasRefreshToken && !authRoutes.includes(path)) {
     console.log("No tokens found, redirecting to /login");

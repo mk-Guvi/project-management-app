@@ -15,6 +15,7 @@ const apiNameKey = "X-API-NAME";
 const axiosInstance: AxiosInstance = axios.create({
   baseURL,
   withCredentials: true,
+  validateStatus: () => true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -56,7 +57,7 @@ axiosInstance.interceptors.response.use(
   },
   async (error: AxiosError): Promise<never> => {
     if (error.response?.status === 401) {
-      clearUser();
+     clearUser();
     }
     return Promise.reject(error);
   }

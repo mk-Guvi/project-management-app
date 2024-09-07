@@ -5,5 +5,5 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main className="py-8 px-2 flex items-center  overflow-y-auto h-full w-full">{children}</main>;
+  return <main className="p-4 flex items-center flex-col   overflow-y-auto h-full w-full">{children}</main>;
 }

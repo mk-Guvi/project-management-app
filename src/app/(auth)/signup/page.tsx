@@ -109,7 +109,7 @@ export default function SignUpPage() {
   }
 
   return (
-    <Card className="max-w-[350px] w-full mx-auto my-8">
+    <Card className="max-w-[350px] w-full mx-auto">
       <CardHeader>
         <CardTitle>Sign Up</CardTitle>
         <CardDescription>Create a new account</CardDescription>

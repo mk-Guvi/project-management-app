@@ -10,10 +10,6 @@ export function middleware(req: NextRequest) {
   const accessToken = req.cookies.get("accessToken");
   const refreshToken = req.cookies.get("refreshToken");
 
-  console.log("Access Token:", accessToken);
-  console.log("Refresh Token:", refreshToken);
-  console.log("All Cookies:", req.cookies.getAll());
-
   // Determine if tokens exist
   const hasAccessToken = !!accessToken;
   const hasRefreshToken = !!refreshToken;

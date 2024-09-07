@@ -17,7 +17,6 @@ import { useModal } from "@/providers/modalProvider";
 import TaskModalContent from "./components/TaskModalContent";
 import TaskDeleteModalContent from "./components/TaskDeleteModalContent";
 
-
 const TaskBoardPage: React.FC = () => {
   const { handleState } = useModal();
   const {
@@ -29,7 +28,6 @@ const TaskBoardPage: React.FC = () => {
     recordChanges,
     setSearch,
     setSortBy,
-    
   } = useTasks();
 
   const handleDragEnd = useCallback(
@@ -39,7 +37,7 @@ const TaskBoardPage: React.FC = () => {
 
       if (source.droppableId !== destination.droppableId) {
         const task = tasks.find((t) => t?.task_id === draggableId);
-        console.log(task, "result", result);
+        
         if (task) {
           updateTask(task.task_id, {
             status: destination.droppableId as TaskDocument["status"],
@@ -88,21 +86,26 @@ const TaskBoardPage: React.FC = () => {
 
   const renderTaskList = useCallback(
     (status: TaskStatus, title: string) => (
-      <TaskList
-        title={title}
-        tasks={filteredTasks(status)}
-        droppableId={status}
-        onEdit={onOpenEditTaskModal}
-        loading={loading}
-        onDelete={onOpenDeleteTaskModal}
-      />
+      <div
+        className={`min-w-[20rem] flex-1 border rounded-md  max-w-[45rem] flex flex-col shadow bg-background overflow-y-auto !overflow-x-hidden
+            `}
+      >
+        <TaskList
+          title={title}
+          tasks={filteredTasks(status)}
+          droppableId={status}
+          onEdit={onOpenEditTaskModal}
+          loading={loading}
+          onDelete={onOpenDeleteTaskModal}
+        />
+      </div>
     ),
-    [filteredTasks, onOpenEditTaskModal, onOpenDeleteTaskModal,loading]
+    [filteredTasks, onOpenEditTaskModal, onOpenDeleteTaskModal, loading]
   );
 
   return (
     <div className="h-full w-full flex flex-col gap-4">
-      <div className="flex items-center gap-2 flex-wrap ">
+      <header className="flex items-center gap-2 flex-wrap ">
         <div className="flex-1">
           <Input
             placeholder="Search"
@@ -112,34 +115,39 @@ const TaskBoardPage: React.FC = () => {
               setSearch(e.target.value);
               recordChanges();
             }}
-            className="max-w-[15rem]"
+            className="max-w-[15rem] min-w-[8rem]"
           />
         </div>
-
-        <p className="text-sm">Sort By</p>
-        <Select
-          value={sortBy}
-          onValueChange={(value) => {
-            setSortBy(value), recordChanges();
-          }}
-        >
-          <SelectTrigger className="max-w-[130px]">
-            <SelectValue placeholder="sort by" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="created_at">Created At</SelectItem>
-            <SelectItem value="updated_at">Updated At</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button onClick={onOpenCreateTaskModal}>Add task</Button>
-      </div>
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="scrollbar-hide min-h-[27rem] flex flex-1 overflow-auto gap-3 py-2 h-full w-full">
-          {renderTaskList(TaskStatus.TODO, "TODO")}
-          {renderTaskList(TaskStatus.IN_PROGRESS, "In Progress")}
-          {renderTaskList(TaskStatus.DONE, "DONE")}
+        <div className="inline-flex gap-2  w-auto items-center ">
+          {" "}
+          <p className="text-sm text-nowrap ">Sort By</p>
+          <Select
+            value={sortBy}
+            onValueChange={(value) => {
+              setSortBy(value), recordChanges();
+            }}
+          >
+            <SelectTrigger className="max-w-[130px]">
+              <SelectValue placeholder="sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="created_at">Created At</SelectItem>
+              <SelectItem value="updated_at">Updated At</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-      </DragDropContext>
+
+        <Button onClick={onOpenCreateTaskModal}>Add task</Button>
+      </header>
+      <div className="scrollbar-hide min-h-[27rem] bg-black flex flex-1  overflow-auto gap-3 py-2 h-full w-full">
+        <DragDropContext onDragEnd={handleDragEnd}>
+          {renderTaskList(TaskStatus.TODO, "TODO")}
+
+          {renderTaskList(TaskStatus.IN_PROGRESS, "In Progress")}
+
+          {renderTaskList(TaskStatus.DONE, "DONE")}
+        </DragDropContext>
+      </div>
     </div>
   );
 };

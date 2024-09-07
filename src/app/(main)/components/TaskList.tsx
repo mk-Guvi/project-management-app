@@ -31,12 +31,13 @@ const TaskList: React.FC<TaskListProps> = ({
       type="COLUMN"
       direction="vertical"
       isCombineEnabled={true}
+      
     >
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className={`flex-1 border rounded-md max-w-[25rem] flex flex-col w-full shadow bg-background overflow-y-auto !overflow-x-hidden
+          className={`flex flex-col h-full w-full shadow bg-background 
             ${snapshot.isDraggingOver ? "bg-gray-50" : ""}
             ${snapshot.draggingFromThisWith ? "bg-blue-50" : ""}`}
         >

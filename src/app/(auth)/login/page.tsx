@@ -69,16 +69,14 @@ export default function LoginPage() {
           "X-API-NAME": "login",
         },
       });
-      console.log("response", response);
-      if (response?.type == "success") {
-        // Handle successful login
-        await fetchUserDetails();
 
+      if (response?.type == "success") {
+        await fetchUserDetails();
         router.push("/");
       } else if (response?.message) {
         toast({
           variant: "error",
-          description: response?.data?.message,
+          description: response?.message,
         });
       } else {
         throw new Error("Failed to login");
@@ -92,10 +90,11 @@ export default function LoginPage() {
     } finally {
       setIsLoading(false);
     }
+    
   }
 
   return (
-    <Card className="max-w-[350px] w-full mx-auto">
+    <Card className="max-w-[350px] w-full m-auto">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>

@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,8 @@ import Link from "next/link";
 import getGoogleOAuthURL from "@/utils/getGoogleUrl";
 import { useRouter } from "next/navigation";
 import useUserDetails from "@/hooks.ts/useUserDetails";
-import { loginAction } from "./helper";
+import { BackendPost } from "@/utils/backend";
+import { backendRoutes } from "@/constants";
 
 const loginSchema = z.object({
   email: z
@@ -41,7 +43,7 @@ type LoginInput = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
-  const { fetchUserDetails } = useUserDetails({
+  const { fetchUserDetails, userDetails } = useUserDetails({
     preventInitialCall: true,
   });
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -58,19 +60,27 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const result = await loginAction(values);
+      const response = await BackendPost({
+        path: backendRoutes.login,
+        data: values,
+        headers: {
+          "X-API-NAME": "login",
+        },
+      });
 
-      if (result.success) {
+      if (response?.type == "success") {
         await fetchUserDetails();
         router.push("/");
-      } else {
+      } else if (response?.message) {
         toast({
           variant: "error",
-          description: result.error || "Failed to login",
+          description: response?.message,
         });
+      } else {
+        throw new Error("Failed to login");
       }
     } catch (e) {
-      console.error(e);
+      console.log(e);
       toast({
         variant: "error",
         description: "Something went wrong. Please try again.",
@@ -78,6 +88,7 @@ export default function LoginPage() {
     } finally {
       setIsLoading(false);
     }
+    
   }
 
   return (
@@ -141,6 +152,7 @@ export default function LoginPage() {
           <Button
             variant="outline"
             className="w-full"
+            // onClick={handleGoogleSignIn}
           >
             <Icons.google className="mr-2 h-4 w-4" />
             Sign in with Google

@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,14 +22,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Icons } from "@/components/ui/icons";
-import axios from "axios";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import getGoogleOAuthURL from "@/utils/getGoogleUrl";
 import { useRouter } from "next/navigation";
 import useUserDetails from "@/hooks.ts/useUserDetails";
-import { BackendPost } from "@/utils/backend";
-import { backendRoutes } from "@/constants";
+import { loginAction } from "./helper";
 
 const loginSchema = z.object({
   email: z
@@ -45,7 +41,7 @@ type LoginInput = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
-  const { fetchUserDetails, userDetails } = useUserDetails({
+  const { fetchUserDetails } = useUserDetails({
     preventInitialCall: true,
   });
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -62,27 +58,19 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await BackendPost({
-        path: backendRoutes.login,
-        data: values,
-        headers: {
-          "X-API-NAME": "login",
-        },
-      });
+      const result = await loginAction(values);
 
-      if (response?.type == "success") {
+      if (result.success) {
         await fetchUserDetails();
         router.push("/");
-      } else if (response?.message) {
+      } else {
         toast({
           variant: "error",
-          description: response?.message,
+          description: result.error || "Failed to login",
         });
-      } else {
-        throw new Error("Failed to login");
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
       toast({
         variant: "error",
         description: "Something went wrong. Please try again.",
@@ -90,7 +78,6 @@ export default function LoginPage() {
     } finally {
       setIsLoading(false);
     }
-    
   }
 
   return (
@@ -154,7 +141,6 @@ export default function LoginPage() {
           <Button
             variant="outline"
             className="w-full"
-            // onClick={handleGoogleSignIn}
           >
             <Icons.google className="mr-2 h-4 w-4" />
             Sign in with Google
